@@ -4,11 +4,17 @@ import { useLogsStore } from '@/stores/logs'
 const logsStore = useLogsStore()
 
 function formatDate(timestamp: number) {
-  return new Date(timestamp).toLocaleString()
+  const d = new Date(timestamp)
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  const hours = String(d.getHours()).padStart(2, '0')
+  const minutes = String(d.getMinutes()).padStart(2, '0')
+  const seconds = String(d.getSeconds()).padStart(2, '0')
+  return `${month}-${day}:${hours}:${minutes}:${seconds}`
 }
 
-function truncate(text: string, maxLength = 50) {
-  return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
+function truncate(text: string, maxLength = 30) {
+  return text.length > maxLength ? text.slice(0, maxLength) + ' ...' : text
 }
 </script>
 
@@ -18,7 +24,7 @@ function truncate(text: string, maxLength = 50) {
     <ul v-if="logsStore.entries.length" class="log-panel__list">
       <li v-for="entry in logsStore.entries" :key="entry.id" class="log-panel__entry">
         <time class="log-panel__time">{{ formatDate(entry.timestamp) }}</time>
-        <strong class="log-panel__type">{{ entry.type }}</strong>
+        <strong class="log-panel__type">{{ entry.type.charAt(0).toUpperCase() + entry.type.slice(1) }}</strong>
         <span class="log-panel__content">{{ truncate(entry.content) }}</span>
       </li>
     </ul>
@@ -28,58 +34,50 @@ function truncate(text: string, maxLength = 50) {
 
 <style scoped>
 .log-panel {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--padding-card);
+  height: 100%;
 }
 
 .log-panel__title {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  text-decoration: underline;
+  margin-bottom: 1.25rem;
 }
 
 .log-panel__list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .log-panel__entry {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: baseline;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #eee;
-}
-
-.log-panel__entry:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
 .log-panel__time {
-  font-size: 0.8rem;
-  color: #888;
+  font-size: 0.85rem;
+  color: var(--color-text);
 }
 
 .log-panel__type {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  background: #f0f0f0;
-  padding: 0.1rem 0.5rem;
-  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: underline;
 }
 
 .log-panel__content {
-  color: #555;
+  color: var(--color-text);
   font-size: 0.9rem;
 }
 
 .log-panel__empty {
-  color: #888;
+  color: var(--color-text-muted);
   font-style: italic;
 }
 </style>

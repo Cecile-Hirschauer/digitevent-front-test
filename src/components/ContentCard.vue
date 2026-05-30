@@ -14,7 +14,7 @@ const emit = defineEmits<{
 <template>
   <article class="content-card">
     <header class="content-card__header">
-      <h2>{{ type === 'joke' ? 'Joke' : 'Fact' }}</h2>
+      <h2>A cool <span class="content-card__type">{{ type === 'joke' ? 'Joke' : 'Fact' }}</span></h2>
       <button
         class="content-card__fetch-btn"
         :disabled="isLoading"
@@ -24,7 +24,7 @@ const emit = defineEmits<{
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path
             d="M8 3v10M8 13l-3-3M8 13l3-3"
-            stroke="white"
+            stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -32,8 +32,8 @@ const emit = defineEmits<{
         </svg>
       </button>
     </header>
-    <p v-if="error" class="error-msg">{{ error }}</p>
-    <p v-else-if="isLoading" class="loading-msg">Loading...</p>
+    <p v-if="error" class="content-card__error">{{ error }}</p>
+    <p v-else-if="isLoading" class="content-card__loading">Loading...</p>
     <p v-else class="content-card__content">
       {{ content || 'Click the button to fetch content.' }}
     </p>
@@ -42,10 +42,13 @@ const emit = defineEmits<{
 
 <style scoped>
 .content-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--padding-card);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .content-card__header {
@@ -53,22 +56,29 @@ const emit = defineEmits<{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .content-card__header h2 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.content-card__type {
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 .content-card__fetch-btn {
   position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
+  top: -0.25rem;
+  right: -0.25rem;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #e53935;
-  border: none;
+  background: var(--color-accent);
+  border: 2px solid var(--color-text);
+  color: var(--color-text);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -77,25 +87,32 @@ const emit = defineEmits<{
 }
 
 .content-card__fetch-btn:hover {
-  background: #c62828;
+  background: var(--color-accent-hover);
 }
 
 .content-card__fetch-btn:focus-visible {
-  outline: 2px solid #1976d2;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
-.content-card__content {
-  color: #555;
+.content-card__fetch-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-.error-msg {
-  color: #c62828;
+.content-card__content {
+  font-weight: 400;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.content-card__error {
+  color: var(--color-error);
   font-weight: 500;
 }
 
-.loading-msg {
-  color: #888;
+.content-card__loading {
+  color: var(--color-text-muted);
   font-style: italic;
 }
 </style>
