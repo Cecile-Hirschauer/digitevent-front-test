@@ -3,8 +3,8 @@ import { useLogsStore } from '@/stores/logs'
 
 const logsStore = useLogsStore()
 
-function formatDate(date: Date) {
-  return new Date(date).toLocaleString()
+function formatDate(timestamp: number) {
+  return new Date(timestamp).toLocaleString()
 }
 
 function truncate(text: string, maxLength = 50) {
@@ -16,7 +16,7 @@ function truncate(text: string, maxLength = 50) {
   <div class="log-panel">
     <h2>Logs</h2>
     <ul v-if="logsStore.entries.length">
-      <li v-for="(entry, index) in logsStore.entries" :key="index">
+      <li v-for="entry in logsStore.entries" :key="entry.id">
         {{ formatDate(entry.timestamp) }} — <strong>{{ entry.type }}</strong> — {{ truncate(entry.content) }}
       </li>
     </ul>

@@ -1,5 +1,6 @@
 export interface LogEntry {
+  id: number
   type: 'joke' | 'fact'
   content: string
-  timestamp: Date
+  timestamp: number
 }
