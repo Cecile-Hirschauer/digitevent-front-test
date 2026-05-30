@@ -1,11 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+import ContentCard from '@/components/ContentCard.vue'
+import { fetchJokes, fetchFacts } from '@/services/api'
+
+const jokeContent = ref('')
+const factContent = ref('')
+
+async function handleFetchJoke() {
+  const data = await fetchJokes()
+  jokeContent.value = data[0]?.joke ?? ''
+}
+
+async function handleFetchFact() {
+  const data = await fetchFacts()
+  factContent.value = data[0]?.fact ?? ''
+}
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <ContentCard type="joke" :content="jokeContent" @fetch="handleFetchJoke" />
+  <ContentCard type="fact" :content="factContent" @fetch="handleFetchFact" />
 </template>
-
-<style scoped></style>
