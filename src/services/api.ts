@@ -1,21 +1,31 @@
-export const URL = 'https://api.api-nins.com/v1'
+const BASE_URL = 'https://api.api-ninjas.com/v1'
 
-async function fetchJoke() {
-  const response = await fetch(`${URL}/jokes`, {
-    headers: {
-      'X-Api-Key': import.meta.env.VITE_API_NINJAS_KEY,
-    },
-  })
-  const data = await response.json()
-  console.log(data)
+export interface JokeResponse {
+  joke: string
 }
 
-async function fetchFact() {
-  const response = await fetch(`${URL}/facts`, {
+export interface FactResponse {
+  fact: string
+}
+
+async function fetchFromAPI<T>(endpoint: string): Promise<T> {
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
     headers: {
       'X-Api-Key': import.meta.env.VITE_API_NINJAS_KEY,
     },
   })
-  const data = await response.json()
-  console.log(data)
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status} ${response.statusText}`)
+  }
+
+  return response.json()
+}
+
+export async function fetchJokes(): Promise<JokeResponse[]> {
+  return fetchFromAPI<JokeResponse[]>('/jokes')
+}
+
+export async function fetchFacts(): Promise<FactResponse[]> {
+  return fetchFromAPI<FactResponse[]>('/facts')
 }
