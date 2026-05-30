@@ -1,12 +1,6 @@
+import type { JokeResponse, FactResponse } from '@/interfaces/api'
+
 const BASE_URL = 'https://api.api-ninjas.com/v1'
-
-export interface JokeResponse {
-  joke: string
-}
-
-export interface FactResponse {
-  fact: string
-}
 
 async function fetchFromAPI<T>(endpoint: string): Promise<T> {
   const response = await fetch(`${BASE_URL}${endpoint}`, {
