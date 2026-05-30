@@ -25,7 +25,11 @@ async function handleFetchFact() {
 </script>
 
 <template>
-  <ContentCard type="joke" :content="jokeContent" @fetch="handleFetchJoke" />
-  <ContentCard type="fact" :content="factContent" @fetch="handleFetchFact" />
-  <LogPanel />
+  <div class="cards-column">
+    <ContentCard type="joke" :content="jokeContent" @fetch="handleFetchJoke" />
+    <ContentCard type="fact" :content="factContent" @fetch="handleFetchFact" />
+  </div>
+  <aside class="logs-column">
+    <LogPanel />
+  </aside>
 </template>
