@@ -2,6 +2,8 @@
 defineProps<{
   type: 'joke' | 'fact'
   content: string
+  isLoading?: boolean
+  error?: string | null
 }>()
 
 const emit = defineEmits<{
@@ -15,15 +17,26 @@ const emit = defineEmits<{
       <h2>{{ type === 'joke' ? 'Joke' : 'Fact' }}</h2>
       <button
         class="content-card__fetch-btn"
+        :disabled="isLoading"
         :aria-label="`Get a new ${type}`"
         @click="emit('fetch')"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M8 3v10M8 13l-3-3M8 13l3-3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path
+            d="M8 3v10M8 13l-3-3M8 13l3-3"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </button>
     </header>
-    <p class="content-card__content">{{ content || 'Click the button to fetch content.' }}</p>
+    <p v-if="error" class="error-msg">{{ error }}</p>
+    <p v-else-if="isLoading" class="loading-msg">Loading...</p>
+    <p v-else class="content-card__content">
+      {{ content || 'Click the button to fetch content.' }}
+    </p>
   </article>
 </template>
 
@@ -74,5 +87,15 @@ const emit = defineEmits<{
 
 .content-card__content {
   color: #555;
+}
+
+.error-msg {
+  color: #c62828;
+  font-weight: 500;
+}
+
+.loading-msg {
+  color: #888;
+  font-style: italic;
 }
 </style>
